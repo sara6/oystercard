@@ -1,7 +1,6 @@
 require 'station.rb'
 
 describe Station do
-
   subject(:station) {described_class.new(:name, :zone)}
   let(:station) {double :station, name:'Lewisham', zone:3}
 
@@ -16,4 +15,5 @@ describe Station do
     end
 
   end
+
 end
