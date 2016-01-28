@@ -11,14 +11,13 @@ class Journey
   end
 
   def start_journey entry_station
-    #@entry_station = entry_station
+    @entry_station = entry_station
     @current_journey[:entry] = entry_station
   end
 
   def end_journey exit_station
-    # @exit_station = exit_station
+    @exit_station = exit_station
     @current_journey[:exit] = exit_station
-
   end
 
   def calculate_fare

@@ -47,14 +47,28 @@ let(:exit_station) {double :exit_station}
   describe 'completed' do
     it { is_expected.to respond_to(:completed?) }
 
-    it 'returns true if has both entry and exit journey' do
+    it 'returns false if has only entry station and no exit station' do
+      journey.start_journey entry_station
+      expect(journey.completed?).to be false
+    end
+
+    it 'returns false if has only exit station and no entry station' do
+      journey.start_journey exit_station
+      expect(journey.completed?).to be false
+    end
+
+    it 'returns true if has both entry and exit station' do
       journey.start_journey entry_station
       journey.end_journey exit_station
       expect(journey.completed?).to be true
     end
+
+
   end
 
   describe 'calculate fare' do
+
+    it { is_expected.to respond_to(:calculate_fare) }
 
     it 'deducts a penalty charge if the user does not touch out' do
       journey.start_journey entry_station
