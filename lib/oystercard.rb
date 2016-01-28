@@ -5,7 +5,6 @@ class Oystercard
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
-  MINIMUM_CHARGE = 1
   PENALTY_FARE = 6
 
  attr_reader :balance, :history, :journey, :entry_station
@@ -26,6 +25,10 @@ class Oystercard
     fail "Insufficient funds" if top_up_needed?
     unless @entry_station.nil?
       deduct(PENALTY_FARE)
+      #YOU WERE RIGHT HEATHER, VIOLA ADMITS THAT SHE IS A NOBHEAD
+      #WE NEEDED TO SHOVEL IN CURRENT_TRIP.current_journey
+      #BUT WE WERE ONLY MEANT TO DO IT IF WE HADN'T RESET ENTRY_STATION TO nil
+      #BECAUSE WE HADN'T TOUCHED OUT
       @history << @current_trip.current_journey
     end
     @entry_station = entry_station
@@ -45,12 +48,11 @@ class Oystercard
   end
 
 
+  private
+
   def top_up_needed?
     @balance <= MINIMUM_BALANCE
   end
-
-
-  # private
 
   def deduct amount
     @balance -= amount
