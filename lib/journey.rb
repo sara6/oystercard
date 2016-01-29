@@ -1,3 +1,5 @@
+require 'station'
+
 class Journey
 
   attr_reader :current_journey
@@ -19,6 +21,7 @@ class Journey
     @exit_station = exit_station
     @current_journey[:exit] = exit_station
   end
+
 
   def calculate_fare
     if completed?

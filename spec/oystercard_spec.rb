@@ -3,6 +3,8 @@ require 'Oystercard'
 describe Oystercard do
 
   let(:dummy_journey) {double :journey}
+  #below is the factory double
+  let(:journey_class) {double :journey_class, new: dummy_journey}
   subject(:oystercard) {described_class.new}
 
   let(:entry_station) {double :station}
