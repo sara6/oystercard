@@ -12,7 +12,7 @@ class Oystercard
   def initialize(journey_klass = Journey)
     @balance = 0
     @history = []
-    @journey = journey_klass
+    @journey_klass = journey_klass
   end
 
   def top_up amount
@@ -25,30 +25,26 @@ class Oystercard
     fail "Insufficient funds" if top_up_needed?
     unless @entry_station.nil?
       deduct(PENALTY_FARE)
-      #YOU WERE RIGHT HEATHER, VIOLA ADMITS THAT SHE IS A NOBHEAD
-      #WE NEEDED TO SHOVEL IN CURRENT_TRIP.current_journey
-      #BUT WE WERE ONLY MEANT TO DO IT IF WE HADN'T RESET ENTRY_STATION TO nil
-      #BECAUSE WE HADN'T TOUCHED OUT
-      @history << @current_trip.current_journey
+      @history << @journey.current_journey
     end
     @entry_station = entry_station
-    @current_trip = @journey.new
-    @current_trip.start_journey(entry_station)
+    @journey = @journey_klass.new
+    @journey.start_journey(entry_station)
   end
 
 
   def touch_out(exit_station)
-    if @current_trip.nil?
-      @current_trip = @journey.new
+    if @journey.nil?
+      @journey = @journey_klass.new
     end
-    @current_trip.end_journey(exit_station)
-    deduct(@current_trip.calculate_fare)
-    @history << @current_trip.current_journey
+    @journey.end_journey(exit_station)
+    deduct(@journey.calculate_fare)
+    @history << @journey.current_journey
     @entry_station = nil
   end
 
 
-  private
+  #private
 
   def top_up_needed?
     @balance <= MINIMUM_BALANCE

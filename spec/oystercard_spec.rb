@@ -1,24 +1,30 @@
 require 'Oystercard'
 
-#HEATHER - WE HAVEN'T ISOLATED THESE TESTS FROM JOURNEY CLASS.
-# JUST SO YOU KNOW TOMORROW WHEN YOU PAIR WITH ANYBODY AND THEY GO 'WTF'?
-# BASICALLY, WE NEED A HELLISH DAY OF MOCKING AND STUBBING
-
 describe Oystercard do
 
-  subject(:oystercard) {described_class.new }
+  let(:dummy_journey) {double :journey}
+  subject(:oystercard) {described_class.new}
+
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
 
-# THESE ARE SO I CAN CHECK THE JOURNEY RETURNED IS RIGHT FROM JOURNEY HISTORY
-
-  let(:current_trip) { {entry: entry_station, exit: exit_station} }
+# # THESE ARE SO I CAN CHECK THE JOURNEY RETURNED IS RIGHT FROM JOURNEY HISTORY
+  let(:journey) { {entry: entry_station, exit: exit_station} }
   let(:incomplete_in_only_trip) {{entry: entry_station}}
   let(:incomplete_out_only_trip) {{exit: exit_station}}
 
 # GET RID OF MAGIC NUMBERS LIKE THIS :)
   let(:standard_topup) {10}
   let(:too_big_topup) {91}
+
+#to stub the journey class do as below
+  before do
+    allow(dummy_journey).to receive(:start_journey)
+    allow(dummy_journey).to receive(:end_journey)
+    allow(dummy_journey).to receive(:calculate_fare)
+    allow(dummy_journey).to receive(:completed?)
+  end
+
 
 describe '#initialize' do
 
@@ -93,8 +99,8 @@ describe '#initialize' do
     it 'stores in #history the details of a complete journey' do
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
-      expect(oystercard.history).to include current_trip
-    end
+      expect(oystercard.history).to include journey
+      end
 
     it 'stores in #history an incomplete journey when touched in twice consecutively' do
       2.times do
